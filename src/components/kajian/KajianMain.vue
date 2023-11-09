@@ -33,6 +33,12 @@
       </div>
     </div>
     <KajianRecommend v-if="!isMobile(width)"></KajianRecommend>
+    <div
+      @click="router.push({ name: 'createPost' })"
+      class="fixed bottom-2 right-2 rounded-full w-10 h-10 bg-gradient-to-br from-kajian-blue to-kajian-darkBlue flex items-center justify-center"
+    >
+      <font-awesome-icon :icon="['fas', 'plus']" style="color: #ffffff" />
+    </div>
   </section>
 </template>
 
@@ -49,6 +55,7 @@ import { watch } from 'vue'
 import { getUser, getUstad, getImage, getUserPhoto } from '@/firebase/kajianDataService.js'
 import { isMobile } from '@/helpers/constantValue.js'
 import { useWindowSize } from '@vueuse/core'
+import router from '@/router'
 
 onMounted(() => {
   getPost()

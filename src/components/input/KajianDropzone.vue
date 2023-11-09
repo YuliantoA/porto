@@ -8,9 +8,11 @@
       <img src="@/assets/kajian/cancel.png" />
     </div>
     <template v-if="poster.length == 0">
-      <div class="mb-10 text-2xl text-kajian-darkGray capitalize">{{ props.placeholderText }}</div>
+      <div class="mb-10 lg:text-2xl text-lg text-kajian-darkGray capitalize">
+        {{ props.placeholderText }}
+      </div>
       <div>
-        Drop file here or
+        <span v-if="!isMobile(width)">Drop file here or </span>
         <button class="font-bold hover:underline" @click="chooseFiles()">Browse File</button>
       </div>
       <input @change="onBrowse" ref="fileUpload" type="file" :accept="ext" hidden />
@@ -20,7 +22,7 @@
         <div class="mb-5">
           <img src="@/assets/kajian/iconOther.png" />
         </div>
-        <div>
+        <div class="text-center">
           {{ poster[0].name }}
         </div>
       </div>
@@ -38,6 +40,10 @@
 <script setup>
 import { useDropZone } from '@vueuse/core'
 import { ref, watch } from 'vue'
+import { useWindowSize } from '@vueuse/core'
+import { isMobile } from '@/helpers/constantValue.js'
+
+const { width } = useWindowSize()
 const fileUpload = ref()
 const dropZone = ref()
 const emit = defineEmits(['updatePoster'])

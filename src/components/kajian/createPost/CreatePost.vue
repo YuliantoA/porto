@@ -1,10 +1,11 @@
 <template>
-  <div class="w-full h-[55rem] flex justify-center items-center">
+  <div class="w-full h-full flex justify-center items-center">
     <div
-      class="w-8/12 h-full flex flex-col justify-center items-center bg-kajian-white rounded-xl p-10 pt-8"
+      class="lg:w-8/12 w-full h-full flex flex-col justify-center items-center bg-kajian-white rounded-xl lg:p-10 p-5 pt-8"
     >
       <div class="relative w-full">
         <div
+          v-if="!isMobile(width)"
           @click="router.replace({ name: 'kajianMain' })"
           class="absolute top-0 right-0 cursor-pointer"
         >
@@ -13,18 +14,25 @@
         <div class="text-2xl mb-10 text-center">Create Post</div>
       </div>
       <createPostForm ref="form" class=""></createPostForm>
-      <div class="w-full my-5 flex justify-end">
+      <div class="w-full my-5 flex lg:justify-end justify-between space-x-5">
+        <button
+          v-if="isMobile(width)"
+          @click="submit"
+          class="px-10 py-3 w-6/12 max-w-[10rem] bg-gradient-to-br from-kajian-red/40 to-kajian-red rounded-xl text-kajian-white font-bold shadow-lg hover:shadow-2xl hover:-translate-y-1 text-center"
+        >
+          Cancel
+        </button>
         <button
           v-if="!isLoading"
           @click="submit"
-          class="px-10 py-3 w-[10rem] bg-gradient-to-br from-kajian-lightBlue to-kajian-darkBlue rounded-xl text-kajian-white font-bold shadow-lg hover:shadow-2xl hover:-translate-y-1"
+          class="px-10 py-3 w-6/12 max-w-[10rem] bg-gradient-to-br from-kajian-lightBlue to-kajian-darkBlue rounded-xl text-kajian-white font-bold shadow-lg hover:shadow-2xl hover:-translate-y-1"
         >
           Submit
         </button>
         <button
           v-else
           type="button"
-          class="px-10 py-3 w-[10rem] flex justify-center items-center bg-gradient-to-br from-kajian-lightBlue to-kajian-darkBlue hover:shadow-2xl focus:ring-blue-500 focus:ring-offset-blue-200 text-white transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg"
+          class="px-10 py-3 w-6/12 max-w-[10rem] flex justify-center items-center bg-gradient-to-br from-kajian-lightBlue to-kajian-darkBlue hover:shadow-2xl focus:ring-blue-500 focus:ring-offset-blue-200 text-white transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg"
         >
           <svg
             width="20"
@@ -51,7 +59,10 @@ import createPostForm from '@/components/kajian/createPost/CreatePostForm.vue'
 import { insertPost, insertImagePost } from '@/firebase/kajianDataService.js'
 import { kajianStore, toastStore } from '@/stores/counter.js'
 import router from '@/router'
+import { useWindowSize } from '@vueuse/core'
+import { isMobile } from '@/helpers/constantValue.js'
 
+const { width } = useWindowSize()
 const toast = toastStore()
 const userStore = kajianStore()
 const form = ref()

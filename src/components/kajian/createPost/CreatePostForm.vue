@@ -2,16 +2,18 @@
   <div
     class="w-full max-h-[41rem] flex flex-col flex-auto items-center relative scrollbar overflow-y-scroll overflow-x-hidden"
   >
-    <div class="w-full h-[7rem]">
+    <div class="w-full lg:h-[7rem] h-[5rem]">
       <KajianTextInput
+        class="lg:text-base text-sm"
         :placeholder-text="'Judul Kajian'"
         :type-input="'text'"
         :list-error="getErrorMessages(v$.judul, 'Judul Kajian')"
         v-model="state.judul"
       ></KajianTextInput>
     </div>
-    <div class="w-full h-[7rem]">
+    <div class="w-full lg:h-[7rem] h-[5rem]">
       <KajianMultiSelect
+        class="lg:text-base text-sm"
         :custom-placeholder="'Ustad'"
         v-model="state.ustad"
         @update-value="
@@ -25,16 +27,19 @@
         :list-error="getErrorMessages(v$.ustad, 'Ustad')"
       ></KajianMultiSelect>
     </div>
-    <div class="w-full h-[7rem]">
+    <div class="w-full lg:h-[7rem] h-[5rem]">
       <KajianDatePicker
         @date-updated="dateUpdated"
         :list-error="getErrorMessages(v$.date, 'Jadwal')"
       >
       </KajianDatePicker>
     </div>
-    <div class="w-full h-[7rem] flex justify-between space-x-5">
+    <div
+      class="w-full lg:h-[7rem] h-[15rem] flex lg:flex-row flex-col justify-between lg:space-x-5"
+    >
       <div class="w-full h-full flex-col">
         <KajianMultiSelect
+          class="lg:text-base text-sm"
           :custom-placeholder="'Provinsi'"
           v-model="provinceCode"
           label="name"
@@ -51,6 +56,7 @@
       </div>
       <div class="w-full h-full flex-col">
         <KajianMultiSelect
+          class="lg:text-base text-sm"
           :disabled="state.province.length === 0"
           :custom-placeholder="'Kota'"
           v-model="kotaCode"
@@ -90,7 +96,7 @@
       :model-value="state.poster"
       :ext="imageExt"
       @update-poster="updatePoster"
-      class="h-[8rem] w-full"
+      class="h-[8rem] w-full lg:text-base text-sm"
     ></KajianDropzone>
     <CkeditorInput
       :model-value="state.description"
@@ -160,19 +166,35 @@ onMounted(() => {
 
 watch(
   () => state.province,
-  (newValue) => {
+  (newValue, oldValue) => {
     if (newValue.length > 0) {
-      getKota()
+      if (newValue != oldValue) {
+        state.kota = ''
+        kotaCode.value = ''
+        getKota()
+      }
+    } else {
+      state.kota = ''
+      kotaCode.value = ''
     }
+    // newValue.length > 0 ? (newValue != oldValue ? getKota() : '') : ''
   }
 )
 
 watch(
   () => state.kota,
-  (newValue) => {
+  (newValue, oldValue) => {
     if (newValue.length > 0) {
-      getKecamatan()
+      if (newValue != oldValue) {
+        state.kecamatan = ''
+        kecamatanKode.value = ''
+        getKecamatan()
+      }
+    } else {
+      kecamatanKode.value = ''
+      state.kecamatan = ''
     }
+    // newValue.length > 0 ? (newValue != oldValue ? getKecamatan() : '') : ''
   }
 )
 

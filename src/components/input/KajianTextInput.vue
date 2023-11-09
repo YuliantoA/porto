@@ -7,7 +7,11 @@
     <div
       @click="focused = true"
       class="absolute left-4 text-kajian-darkGray transition-all ease-out duration-300 select-none cursor-text"
-      :class="[focused || modelValue.length > 0 ? 'top-1 text-sm ' : '  top-4 text-lg']"
+      :class="[
+        focused || modelValue.length > 0
+          ? 'top-1 lg:text-sm text-xs '
+          : '  top-4 lg:text-lg text-sm'
+      ]"
     >
       {{ props.placeholderText }}
       <slot name="icon"></slot>

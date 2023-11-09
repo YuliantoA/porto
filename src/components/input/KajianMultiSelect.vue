@@ -2,16 +2,21 @@
   <div
     @click="trigger"
     ref="target"
-    class="relative w-full h-[4rem]"
-    :class="[
-      disabled ? 'bg-kajian-darkestGray' : 'bg-kajian-gray',
-      listError.length > 0 ? 'border-kajian-red border-l-4 border' : 'border-kajian-blue border-l-4'
-    ]"
+    class="relative w-full lg:h-[4rem] h-[3rem]"
+    :class="[disabled ? 'bg-kajian-darkestGray' : 'bg-kajian-gray']"
   >
     <div
-      class="absolute left-3 z-50 transition-all ease-out duration-200"
+      class="absolute top-0 left-0 w-full lg:h-[4rem] h-[3.4rem] z-10"
       :class="[
-        modelValue || placeholderActive ? 'top-1 text-sm' : 'top-5 text-lg',
+        listError.length > 0
+          ? 'border-kajian-red border-l-4  border'
+          : 'border-kajian-blue border-l-4  '
+      ]"
+    ></div>
+    <div
+      class="absolute left-3 z-20 transition-all ease-out duration-200"
+      :class="[
+        modelValue || placeholderActive ? 'top-1 lg:text-sm text-xs' : 'top-5 lg:text-lg text-sm',
         disabled ? 'text-kajian-white ' : 'text-kajian-darkGray'
       ]"
     >
@@ -32,10 +37,12 @@
       :options="listOption"
       :classes="{
         search:
-          'w-full absolute inset-0 outline-none focus:ring-0 appearance-none box-border border-0 text-base font-sans rounded pl-3.5 rtl:pl-0 rtl:pr-3.5 bg-kajian-gray ',
+          'w-full absolute inset-0 outline-none focus:ring-0 appearance-none box-border border-0 lg:text-base text-xs font-sans rounded pl-3.5 rtl:pl-0 rtl:pr-3.5 bg-kajian-gray ',
         containerDisabled: 'cursor-default !bg-kajian-darkestGray ',
         container:
-          'relative mx-auto w-full flex items-center justify-end box-border cursor-pointer bg-kajian-gray text-base leading-snug outline-none pt-4 '
+          'relative mx-auto w-full flex items-center justify-end box-border cursor-pointer bg-kajian-gray lg:text-base text-xs leading-snug outline-none pt-4  ',
+        option:
+          'flex items-center justify-start box-border text-left cursor-pointer lg:text-base text-xs leading-snug py-2 px-3'
       }"
     >
       <template v-slot:clear>
@@ -83,12 +90,13 @@ defineOptions({
   inheritAttrs: false
 })
 const emit = defineEmits(['updateValue'])
-
+const isOptionOper = ref(false)
 const target = ref(null)
 const multiselect = ref()
 const placeholderActive = ref(false)
 function trigger() {
-  props.disabled ? '' : multiselect.value.open()
+  isOptionOper.value ? multiselect.value.close() : props.disabled ? '' : multiselect.value.open()
+  isOptionOper.value = !isOptionOper.value
 }
 onClickOutside(target, () => multiselect.value.close())
 function checkSearch(value) {
@@ -97,6 +105,7 @@ function checkSearch(value) {
 
 async function onChange(modelValue, x) {
   emit('updateValue', { value: modelValue, text: x.ariaLabel })
+  isOptionOper.value = !isOptionOper.value
 }
 </script>
 
