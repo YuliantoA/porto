@@ -17,7 +17,7 @@
       <div class="w-full my-5 flex lg:justify-end justify-between space-x-5">
         <button
           v-if="isMobile(width)"
-          @click="submit"
+          @click="router.replace({ name: 'kajianMain' })"
           class="px-10 py-3 w-6/12 max-w-[10rem] bg-gradient-to-br from-kajian-red/40 to-kajian-red rounded-xl text-kajian-white font-bold shadow-lg hover:shadow-2xl hover:-translate-y-1 text-center"
         >
           Cancel

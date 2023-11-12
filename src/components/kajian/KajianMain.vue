@@ -34,8 +34,9 @@
     </div>
     <KajianRecommend v-if="!isMobile(width)"></KajianRecommend>
     <div
+      v-if="isMobile(width)"
       @click="router.push({ name: 'createPost' })"
-      class="fixed bottom-2 right-2 rounded-full w-10 h-10 bg-gradient-to-br from-kajian-blue to-kajian-darkBlue flex items-center justify-center"
+      class="fixed bottom-4 right-4 rounded-full w-20 h-20 bg-gradient-to-br from-kajian-blue to-kajian-darkBlue flex items-center justify-center"
     >
       <font-awesome-icon :icon="['fas', 'plus']" style="color: #ffffff" />
     </div>

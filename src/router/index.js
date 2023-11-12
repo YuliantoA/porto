@@ -21,40 +21,6 @@ const router = createRouter({
       component: () => import('@/views/TrillioPage.vue')
     },
     {
-      path: '/quiz',
-      name: 'quiz',
-      component: () => import('@/views/QuizzPage.vue'),
-      children: [
-        {
-        path: 'home',
-        name: 'Home',
-        component: QuizzHome,
-      },
-        {
-          path: 'question',
-          component: () => import('@/views/QuizzQuestionView.vue'),
-          children: [
-            {
-        path: 'form',
-        name: 'Form',
-        component: () => import('@/components/quiz/QuizzForm.vue'),
-      },
-            {
-        path: 'detail',
-        name: 'Detail',
-              component: () => import('@/components/quiz/QuizzQuestion.vue'),
-         props: true
-      },
-          ]
-        },
-        {
-          path: 'score',
-          name: 'Score',
-          component:QuizzScore
-        }
-      ]
-    },
-    {
       path: '/kajian',
       name: 'kajian',
       redirect: { path: "/kajian/main" },

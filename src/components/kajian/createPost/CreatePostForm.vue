@@ -1,108 +1,110 @@
 <template>
   <div
-    class="w-full max-h-[41rem] flex flex-col flex-auto items-center relative scrollbar overflow-y-scroll overflow-x-hidden"
+    class="w-full max-h-[41rem] flex flex-col flex-auto items-center relative scrollbar overflow-y-scroll overflow-x-hidden border-kajian-gray border"
   >
-    <div class="w-full lg:h-[7rem] h-[5rem]">
-      <KajianTextInput
-        class="lg:text-base text-sm"
-        :placeholder-text="'Judul Kajian'"
-        :type-input="'text'"
-        :list-error="getErrorMessages(v$.judul, 'Judul Kajian')"
-        v-model="state.judul"
-      ></KajianTextInput>
-    </div>
-    <div class="w-full lg:h-[7rem] h-[5rem]">
-      <KajianMultiSelect
-        class="lg:text-base text-sm"
-        :custom-placeholder="'Ustad'"
-        v-model="state.ustad"
-        @update-value="
-          ({ value }) => {
-            state.ustad = value
-          }
-        "
-        :list-option="listOptionUstad"
-        label="name"
-        value-prop="code"
-        :list-error="getErrorMessages(v$.ustad, 'Ustad')"
-      ></KajianMultiSelect>
-    </div>
-    <div class="w-full lg:h-[7rem] h-[5rem]">
-      <KajianDatePicker
-        @date-updated="dateUpdated"
-        :list-error="getErrorMessages(v$.date, 'Jadwal')"
+    <div class="w-full h-full p-3">
+      <div class="w-full lg:h-[7rem] h-[6rem]">
+        <KajianTextInput
+          class="lg:text-base text-sm"
+          :placeholder-text="'Judul Kajian'"
+          :type-input="'text'"
+          :list-error="getErrorMessages(v$.judul, 'Judul Kajian')"
+          v-model="state.judul"
+        ></KajianTextInput>
+      </div>
+      <div class="w-full lg:h-[7rem] h-[6rem]">
+        <KajianMultiSelect
+          class="lg:text-base text-sm"
+          :custom-placeholder="'Ustad'"
+          v-model="state.ustad"
+          @update-value="
+            ({ value }) => {
+              state.ustad = value
+            }
+          "
+          :list-option="listOptionUstad"
+          label="name"
+          value-prop="code"
+          :list-error="getErrorMessages(v$.ustad, 'Ustad')"
+        ></KajianMultiSelect>
+      </div>
+      <div class="w-full lg:h-[7rem] h-[6rem]">
+        <KajianDatePicker
+          @date-updated="dateUpdated"
+          :list-error="getErrorMessages(v$.date, 'Jadwal')"
+        >
+        </KajianDatePicker>
+      </div>
+      <div
+        class="w-full lg:h-[7rem] h-[18rem] flex lg:flex-row flex-col justify-between lg:space-x-5"
       >
-      </KajianDatePicker>
+        <div class="w-full h-full flex-col">
+          <KajianMultiSelect
+            class="lg:text-base text-sm"
+            :custom-placeholder="'Provinsi'"
+            v-model="provinceCode"
+            label="name"
+            value-prop="code"
+            @update-value="
+              ({ value, text }) => {
+                state.province = text.toLowerCase()
+                provinceCode = value
+              }
+            "
+            :list-option="listOptionProvince"
+            :list-error="getErrorMessages(v$.province, 'Province')"
+          ></KajianMultiSelect>
+        </div>
+        <div class="w-full h-full flex-col">
+          <KajianMultiSelect
+            class="lg:text-base text-sm"
+            :disabled="state.province.length === 0"
+            :custom-placeholder="'Kota'"
+            v-model="kotaCode"
+            label="name"
+            value-prop="code"
+            @update-value="
+              ({ value, text }) => {
+                state.kota = text.toLowerCase()
+                kotaCode = value
+              }
+            "
+            :list-option="listOptionKota"
+            :list-error="getErrorMessages(v$.kota, 'Kota')"
+          ></KajianMultiSelect>
+        </div>
+        <div class="w-full h-full flex-col">
+          <KajianMultiSelect
+            :disabled="state.kota.length === 0"
+            :custom-placeholder="'Kecamatan'"
+            v-model="kecamatanKode"
+            label="name"
+            value-prop="code"
+            @update-value="
+              ({ value, text }) => {
+                state.kecamatan = text.toLowerCase()
+                kecamatanKode = value
+              }
+            "
+            :list-option="listOptionKecamatan"
+            :list-error="getErrorMessages(v$.kecamatan, 'Kecamatan')"
+          ></KajianMultiSelect>
+        </div>
+      </div>
+      <KajianDropzone
+        placeholder-text="Upload Poster"
+        :list-error="getErrorMessages(v$.poster, 'Poster')"
+        :model-value="state.poster"
+        :ext="imageExt"
+        @update-poster="updatePoster"
+        class="h-[8rem] w-full lg:text-base text-sm"
+      ></KajianDropzone>
+      <CkeditorInput
+        :model-value="state.description"
+        @update-value="updateDescription"
+        :list-error="getErrorMessages(v$.description, 'Description')"
+      />
     </div>
-    <div
-      class="w-full lg:h-[7rem] h-[15rem] flex lg:flex-row flex-col justify-between lg:space-x-5"
-    >
-      <div class="w-full h-full flex-col">
-        <KajianMultiSelect
-          class="lg:text-base text-sm"
-          :custom-placeholder="'Provinsi'"
-          v-model="provinceCode"
-          label="name"
-          value-prop="code"
-          @update-value="
-            ({ value, text }) => {
-              state.province = text.toLowerCase()
-              provinceCode = value
-            }
-          "
-          :list-option="listOptionProvince"
-          :list-error="getErrorMessages(v$.province, 'Province')"
-        ></KajianMultiSelect>
-      </div>
-      <div class="w-full h-full flex-col">
-        <KajianMultiSelect
-          class="lg:text-base text-sm"
-          :disabled="state.province.length === 0"
-          :custom-placeholder="'Kota'"
-          v-model="kotaCode"
-          label="name"
-          value-prop="code"
-          @update-value="
-            ({ value, text }) => {
-              state.kota = text.toLowerCase()
-              kotaCode = value
-            }
-          "
-          :list-option="listOptionKota"
-          :list-error="getErrorMessages(v$.kota, 'Kota')"
-        ></KajianMultiSelect>
-      </div>
-      <div class="w-full h-full flex-col">
-        <KajianMultiSelect
-          :disabled="state.kota.length === 0"
-          :custom-placeholder="'Kecamatan'"
-          v-model="kecamatanKode"
-          label="name"
-          value-prop="code"
-          @update-value="
-            ({ value, text }) => {
-              state.kecamatan = text.toLowerCase()
-              kecamatanKode = value
-            }
-          "
-          :list-option="listOptionKecamatan"
-          :list-error="getErrorMessages(v$.kecamatan, 'Kecamatan')"
-        ></KajianMultiSelect>
-      </div>
-    </div>
-    <KajianDropzone
-      placeholder-text="Upload Poster"
-      :list-error="getErrorMessages(v$.poster, 'Poster')"
-      :model-value="state.poster"
-      :ext="imageExt"
-      @update-poster="updatePoster"
-      class="h-[8rem] w-full lg:text-base text-sm"
-    ></KajianDropzone>
-    <CkeditorInput
-      :model-value="state.description"
-      @update-value="updateDescription"
-      :list-error="getErrorMessages(v$.description, 'Description')"
-    />
   </div>
 </template>
 

@@ -52,7 +52,7 @@
   </div>
   <template v-for="(error, index) of props.listError" :key="error">
     <div class="input-errors" v-if="index < 1">
-      <div class="error-msg text-red-500 lg:text-xs text-xs lg:p-0 pl-3">
+      <div class="error-msg text-red-500 lg:text-xs text-xs lg:p-0 pl-3 lg:mt-0 mt-3">
         {{ error }}
       </div>
     </div>
